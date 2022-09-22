@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const adsSchema = new mongoose.Schema({
   title: { type: String, required: true },
@@ -7,7 +7,10 @@ const adsSchema = new mongoose.Schema({
   photo: { type: String, required: true },
   price: { type: String, required: true },
   location: { type: String, required: true },
-  seller: { type: String, required: true },
+  seller: { type: String, required: true, ref: "User" },
 });
 
-module.exports = mongoose.model("Ad", adsSchema);
+adsSchema.index({ title: "text" });
+
+const Ad = mongoose.model("Ad", adsSchema);
+export default Ad;

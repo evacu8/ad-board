@@ -1,10 +1,10 @@
-const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
+import express from "express";
+import cors from "cors";
+import mongoose from "mongoose";
 
-const adsRoutes = require("./routes/ads.routes");
-const usersRoutes = require("./routes/users.routes");
-const authRoutes = require("./routes/auth.routes");
+import adsRoutes from "./routes/ads.routes.js";
+import usersRoutes from "./routes/users.routes.js";
+import authRoutes from "./routes/auth.routes.js";
 
 const app = express();
 
@@ -33,6 +33,6 @@ const db = mongoose.connection;
 db.once("open", () => {});
 db.on("error", (err) => console.log("Error " + err));
 
-const server = app.listen("8000", () => {});
-
-module.exports = server;
+const server = app.listen("8000", () => {
+  console.log("Server is running on port: 8000");
+});

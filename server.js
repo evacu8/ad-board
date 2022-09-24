@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 
 import adsRoutes from "./routes/ads.routes.js";
 import usersRoutes from "./routes/users.routes.js";
@@ -8,9 +10,24 @@ import authRoutes from "./routes/auth.routes.js";
 
 const app = express();
 
+const NODE_ENV = process.env.NODE_ENV;
+let dbUri = "";
+
+if (NODE_ENV === "production") dbUri = "url to remote db";
+else if (NODE_ENV === "test") dbUri = "mongodb://localhost:27017/adBoardDBtest";
+else dbUri = "mongodb://localhost:27017/adBoardDB";
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(
+  session({
+    secret: "secretMessage",
+    store: MongoStore.create({ mongoUrl: dbUri }),
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.use("/api", adsRoutes);
 app.use("/api", usersRoutes);
@@ -19,13 +36,6 @@ app.use("/auth", authRoutes);
 app.use((req, res) => {
   res.status(404).send({ message: "Not found..." });
 });
-
-const NODE_ENV = process.env.NODE_ENV;
-let dbUri = "";
-
-if (NODE_ENV === "production") dbUri = "url to remote db";
-else if (NODE_ENV === "test") dbUri = "mongodb://localhost:27017/adBoardDBtest";
-else dbUri = "mongodb://localhost:27017/adBoardDB";
 
 mongoose.connect(dbUri, { useNewUrlParser: true });
 const db = mongoose.connection;

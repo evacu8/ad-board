@@ -2,7 +2,11 @@ import User from "../models/users.model.js";
 import bcrypt from "bcryptjs";
 
 export const getUser = async (req, res) => {
-  res.send("user info");
+  if (req.session.login) {
+    res.send({ login: req.session.login });
+  } else {
+    res.status(401).send({ message: "You are not authorized" });
+  }
 };
 
 export const register = async (req, res) => {
@@ -49,6 +53,7 @@ export const login = async (req, res) => {
         res.status(400).send({ message: "Login or password is incorrect" });
       } else {
         if (bcrypt.compareSync(password, user.password)) {
+          req.session.login = user.login;
           res.status(200).send({ message: "Login successful" });
         } else {
           res.status(400).send({ message: "Login or password is incorrect" });

@@ -1,4 +1,6 @@
 import express from "express";
+import { authMiddleware } from "../utils/authMiddleware.js";
+
 const router = express.Router();
 import {
   getAll,
@@ -15,10 +17,10 @@ router.get("/ads/:id", getById);
 
 router.get("/ads/search/:searchPhrase", getByPhrase);
 
-router.post("/ads", create);
+router.post("/ads", authMiddleware, create);
 
-router.put("/ads/:id", update);
+router.put("/ads/:id", authMiddleware, update);
 
-router.delete("/ads/:id", remove);
+router.delete("/ads/:id", authMiddleware, remove);
 
 export default router;

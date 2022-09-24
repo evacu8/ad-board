@@ -2,11 +2,7 @@ import User from "../models/users.model.js";
 import bcrypt from "bcryptjs";
 
 export const getUser = async (req, res) => {
-  if (req.session.login) {
-    res.send({ login: req.session.login });
-  } else {
-    res.status(401).send({ message: "You are not authorized" });
-  }
+  res.send({ message: "I'm logged" });
 };
 
 export const register = async (req, res) => {

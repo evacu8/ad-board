@@ -1,4 +1,6 @@
 import Ad from "../models/ads.model.js";
+import fs from "fs";
+import { getImageFileType } from "../utils/getImageFileType.js";
 
 export const getAll = async (req, res) => {
   try {
@@ -31,7 +33,39 @@ export const getByPhrase = async (req, res) => {
 };
 
 export const create = async (req, res) => {
-  res.send("new ad created");
+  try {
+    const { title, text, price, location } = req.body;
+    const fileType = req.file ? await getImageFileType(req.file) : "unknown";
+    if (
+      title &&
+      typeof title === "string" &&
+      text &&
+      typeof text === "string" &&
+      price &&
+      typeof price === "string" &&
+      location &&
+      typeof location === "string" &&
+      req.file &&
+      ["image/png", "image/jpeg", "image/gif"].includes(fileType)
+    ) {
+      const ad = await Ad.create({
+        title,
+        text,
+        published: Date.now(),
+        photo: req.file.filename,
+        price,
+        location,
+        seller: req.session.user.id,
+      });
+      res.status(201).send({ message: `Ad created ${ad.title}` });
+    } else {
+      fs.unlinkSync(req.file.path);
+      res.status(400).send({ message: "Bad request" });
+    }
+  } catch (err) {
+    fs.unlinkSync(req.file.path);
+    res.status(500).send({ message: err.message });
+  }
 };
 
 export const update = async (req, res) => {

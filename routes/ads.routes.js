@@ -1,5 +1,6 @@
 import express from "express";
 import { authMiddleware } from "../utils/authMiddleware.js";
+import { imageUpload } from "../utils/imageUpload.js";
 
 const router = express.Router();
 import {
@@ -17,7 +18,7 @@ router.get("/ads/:id", getById);
 
 router.get("/ads/search/:searchPhrase", getByPhrase);
 
-router.post("/ads", authMiddleware, create);
+router.post("/ads", authMiddleware, imageUpload.single("photo"), create);
 
 router.put("/ads/:id", authMiddleware, update);
 

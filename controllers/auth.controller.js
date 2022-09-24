@@ -9,7 +9,7 @@ export const getUser = async (req, res) => {
 
 export const register = async (req, res) => {
   try {
-    const { login, password, avatar, phone } = req.body;
+    const { login, password, phone } = req.body;
     const fileType = req.file ? await getImageFileType(req.file) : "unknown";
     if (
       login &&
@@ -34,9 +34,11 @@ export const register = async (req, res) => {
       });
       res.status(201).send({ message: `User created ${user.login}` });
     } else {
+      fs.unlinkSync(req.file.path);
       res.status(400).send({ message: "Bad request" });
     }
   } catch (err) {
+    fs.unlinkSync(req.file.path);
     res.status(500).send({ message: err.message });
   }
 };

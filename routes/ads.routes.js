@@ -20,7 +20,7 @@ router.get("/ads/search/:searchPhrase", getByPhrase);
 
 router.post("/ads", authMiddleware, imageUpload.single("photo"), create);
 
-router.put("/ads/:id", authMiddleware, update);
+router.put("/ads/:id", authMiddleware, imageUpload.single("photo"), update);
 
 router.delete("/ads/:id", authMiddleware, remove);
 

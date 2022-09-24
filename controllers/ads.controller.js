@@ -69,18 +69,33 @@ export const create = async (req, res) => {
 };
 
 export const update = async (req, res) => {
-  const { title, text, published, photo, price, location, seller } = req.body;
+  const { title, text, price, location } = req.body;
+  const fileType = req.file ? await getImageFileType(req.file) : "unknown";
 
   try {
     const ad = await Ad.findById(req.params.id);
     if (!ad) return res.status(404).json({ message: "Ad not found" });
-    ad.title = title;
-    ad.text = text;
-    ad.published = published;
-    ad.photo = photo;
-    ad.price = price;
-    ad.location = location;
-    ad.seller = seller;
+    ad.title = title || ad.title;
+    ad.text = text || ad.text;
+    if (
+      title ||
+      text ||
+      location ||
+      price ||
+      (req.file && ["image/png", "image/jpeg", "image/gif"].includes(fileType))
+    ) {
+      ad.published = Date.now();
+    }
+    if (
+      req.file &&
+      ["image/png", "image/jpeg", "image/gif"].includes(fileType)
+    ) {
+      fs.unlinkSync(process.cwd() + "/public/uploads/" + ad.photo);
+      ad.photo = req.file.filename;
+    }
+    ad.price = price || ad.price;
+    ad.location = location || ad.location;
+    ad.seller = req.session.user.id;
     await ad.save();
     res.json({ message: "Ad updated " });
   } catch (err) {

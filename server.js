@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/api", adsRoutes);
 app.use("/api", usersRoutes);
-app.use("/api", authRoutes);
+app.use("/auth", authRoutes);
 
 app.use((req, res) => {
   res.status(404).send({ message: "Not found..." });

@@ -13,6 +13,15 @@ const app = express();
 const NODE_ENV = process.env.NODE_ENV;
 let dbUri = "";
 
+if (NODE_ENV !== "production") {
+  app.use(
+    cors({
+      origin: ["http://localhost:3000"],
+      credentials: true,
+    })
+  );
+}
+
 if (NODE_ENV === "production") dbUri = "url to remote db";
 else if (NODE_ENV === "test") dbUri = "mongodb://localhost:27017/adBoardDBtest";
 else dbUri = "mongodb://localhost:27017/adBoardDB";
@@ -22,10 +31,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   session({
-    secret: "secretMessage",
+    secret: process.env.SECRET,
     store: MongoStore.create({ mongoUrl: dbUri }),
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV == "production",
+    },
   })
 );
 

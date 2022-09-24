@@ -49,13 +49,25 @@ export const login = async (req, res) => {
         res.status(400).send({ message: "Login or password is incorrect" });
       } else {
         if (bcrypt.compareSync(password, user.password)) {
-          req.session.login = user.login;
-          res.status(200).send({ message: "Login successful" });
+          req.session.user = {
+            login: user.login,
+            id: user.id,
+          };
+          res.status(200).send(req.session.user);
         } else {
           res.status(400).send({ message: "Login or password is incorrect" });
         }
       }
     }
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+export const logout = async (req, res) => {
+  try {
+    req.session.destroy();
+    res.status(200).send({ message: "User logged out" });
   } catch (err) {
     res.status(500).send({ message: err.message });
   }

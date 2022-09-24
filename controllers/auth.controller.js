@@ -1,5 +1,6 @@
 import User from "../models/users.model.js";
 import bcrypt from "bcryptjs";
+import fs from "fs";
 import { getImageFileType } from "../utils/getImageFileType.js";
 
 export const getUser = async (req, res) => {
@@ -20,6 +21,7 @@ export const register = async (req, res) => {
     ) {
       const userWithLogin = await User.findOne({ login });
       if (userWithLogin) {
+        fs.unlinkSync(req.file.path);
         return res
           .status(409)
           .send({ message: "User with this login already exists" });

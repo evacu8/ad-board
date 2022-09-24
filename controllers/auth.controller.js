@@ -36,5 +36,26 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  res.send("login");
+  try {
+    const { login, password } = req.body;
+    if (
+      login &&
+      typeof login === "string" &&
+      password &&
+      typeof password === "string"
+    ) {
+      const user = await User.findOne({ login });
+      if (!user) {
+        res.status(400).send({ message: "Login or password is incorrect" });
+      } else {
+        if (bcrypt.compareSync(password, user.password)) {
+          res.status(200).send({ message: "Login successful" });
+        } else {
+          res.status(400).send({ message: "Login or password is incorrect" });
+        }
+      }
+    }
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
 };

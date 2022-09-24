@@ -1,5 +1,8 @@
 import express from "express";
 import cors from "cors";
+import { fileURLToPath } from "url";
+import path from "path";
+import { dirname } from "path";
 import mongoose from "mongoose";
 import session from "express-session";
 import MongoStore from "connect-mongo";
@@ -7,6 +10,9 @@ import MongoStore from "connect-mongo";
 import adsRoutes from "./routes/ads.routes.js";
 import usersRoutes from "./routes/users.routes.js";
 import authRoutes from "./routes/auth.routes.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 
@@ -40,6 +46,9 @@ app.use(
     },
   })
 );
+
+app.use(express.static(path.join(__dirname, "/client/build")));
+app.use(express.static(path.join(__dirname, "/public")));
 
 app.use("/api", adsRoutes);
 app.use("/api", usersRoutes);

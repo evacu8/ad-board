@@ -8,7 +8,6 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 
 import adsRoutes from "./routes/ads.routes.js";
-import usersRoutes from "./routes/users.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -51,7 +50,6 @@ app.use(express.static(path.join(__dirname, "/client/build")));
 app.use(express.static(path.join(__dirname, "/public")));
 
 app.use("/api", adsRoutes);
-app.use("/api", usersRoutes);
 app.use("/auth", authRoutes);
 
 app.use((req, res) => {

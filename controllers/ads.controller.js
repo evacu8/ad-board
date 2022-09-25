@@ -78,10 +78,10 @@ export const update = async (req, res) => {
     ad.title = title || ad.title;
     ad.text = text || ad.text;
     if (
-      title ||
-      text ||
-      location ||
-      price ||
+      (title && title !== ad.title) ||
+      (text && text !== ad.text) ||
+      (location && location !== ad.location) ||
+      (price && price !== ad.price) ||
       (req.file && ["image/png", "image/jpeg", "image/gif"].includes(fileType))
     ) {
       ad.published = Date.now();

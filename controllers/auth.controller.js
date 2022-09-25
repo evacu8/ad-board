@@ -53,6 +53,9 @@ export const login = async (req, res) => {
       typeof password === "string"
     ) {
       const user = await User.findOne({ login });
+      if (user.id === req.session.user.id) {
+        res.status(200).send({ message: "User already logged in" });
+      }
       if (!user) {
         res.status(400).send({ message: "Login or password is incorrect" });
       } else {

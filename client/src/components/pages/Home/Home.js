@@ -1,5 +1,7 @@
+import AllAds from "../../features/AllAds/AllAds";
+
 const Home = () => {
-  return <div>Home</div>;
+  return <AllAds />;
 };
 
 export default Home;

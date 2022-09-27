@@ -4,7 +4,7 @@ import fs from "fs";
 import { getImageFileType } from "../utils/getImageFileType.js";
 
 export const getUser = async (req, res) => {
-  res.send({ message: "I'm logged" });
+  res.status(200).send(req.session.user);
 };
 
 export const register = async (req, res) => {
@@ -53,9 +53,6 @@ export const login = async (req, res) => {
       typeof password === "string"
     ) {
       const user = await User.findOne({ login });
-      if (user.id === req.session.user.id) {
-        res.status(200).send({ message: "User already logged in" });
-      }
       if (!user) {
         res.status(400).send({ message: "Login or password is incorrect" });
       } else {

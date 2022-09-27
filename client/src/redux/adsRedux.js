@@ -21,7 +21,7 @@ export const removeAd = (payload) => ({ type: REMOVE_AD, payload });
 
 export const fetchAds = () => {
   return (dispatch) => {
-    fetch(`${API_URL}/api/ads`)
+    fetch(`${API_URL}api/ads`)
       .then((res) => res.json())
       .then((ads) => dispatch(updateAds(ads)));
   };

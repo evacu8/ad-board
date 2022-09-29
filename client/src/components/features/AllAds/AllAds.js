@@ -23,7 +23,7 @@ const AllAds = () => {
     <Container>
       <div className="d-flex justify-content-between mb-4">
         <h2>All ads</h2>
-        <Link to="/ad/add">
+        <Link to="/ad/new">
           <button type="button" className="btn btn-outline-info">
             New ad
           </button>

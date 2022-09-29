@@ -36,7 +36,7 @@ export const updateAdData = (payload) => {
       },
       body: JSON.stringify(payload),
     };
-    fetch(`${API_URL}/api/ads/${payload.id}`, options).then(
+    fetch(`${API_URL}api/ads/${payload.id}`, options).then(
       dispatch(editAd(payload))
     );
   };
@@ -51,7 +51,7 @@ export const addAdData = (payload) => {
       },
       body: JSON.stringify(payload),
     };
-    fetch(`${API_URL}/api/ads`, options)
+    fetch(`${API_URL}api/ads`, options)
       .then(() => dispatch(addNewAd(payload)))
       .then(() => fetchAds());
   };
@@ -65,7 +65,7 @@ export const removeAdData = (payload) => {
         "Content-type": "application/json",
       },
     };
-    fetch(`${API_URL}/api/ads/${payload}`, options).then(() =>
+    fetch(`${API_URL}api/ads/${payload}`, options).then(() =>
       dispatch(removeAd(payload))
     );
   };

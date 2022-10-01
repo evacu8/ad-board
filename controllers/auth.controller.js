@@ -34,11 +34,9 @@ export const register = async (req, res) => {
       });
       res.status(201).send({ message: `User created ${user.login}` });
     } else {
-      fs.unlinkSync(req.file.path);
       res.status(400).send({ message: "Bad request" });
     }
   } catch (err) {
-    fs.unlinkSync(req.file.path);
     res.status(500).send({ message: err.message });
   }
 };
@@ -66,6 +64,8 @@ export const login = async (req, res) => {
           res.status(400).send({ message: "Login or password is incorrect" });
         }
       }
+    } else {
+      res.status(400).send({ message: "Provide correct login and password" });
     }
   } catch (err) {
     res.status(500).send({ message: err.message });

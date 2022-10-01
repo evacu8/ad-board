@@ -6,10 +6,11 @@ import Spinner from "react-bootstrap/Spinner";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getUser } from "../../../redux/usersRedux";
 
 const AllAds = () => {
   const ads = useSelector((state) => getAllAds(state));
-  console.log(ads);
+  const user = useSelector(getUser);
 
   const [loaded, setLoaded] = useState(false);
 
@@ -23,11 +24,13 @@ const AllAds = () => {
     <Container>
       <div className="d-flex justify-content-between mb-4">
         <h2>All ads</h2>
-        <Link to="/ad/new">
-          <button type="button" className="btn btn-outline-info">
-            New ad
-          </button>
-        </Link>
+        {user && (
+          <Link to="/ad/new">
+            <button type="button" className="btn btn-outline-info">
+              New ad
+            </button>
+          </Link>
+        )}
       </div>
       <Spinner
         animation="border"

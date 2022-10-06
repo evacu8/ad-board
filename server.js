@@ -31,7 +31,8 @@ if (NODE_ENV === "production") dbUri = "url to remote db";
 else if (NODE_ENV === "test") dbUri = "mongodb://localhost:27017/adBoardDBtest";
 else dbUri = "mongodb://localhost:27017/adBoardDB";
 
-app.use(cors());
+mongoose.connect(dbUri, { useNewUrlParser: true });
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
@@ -55,12 +56,6 @@ app.use("/auth", authRoutes);
 app.use((req, res) => {
   res.status(404).send({ message: "Not found..." });
 });
-
-mongoose.connect(dbUri, { useNewUrlParser: true });
-const db = mongoose.connection;
-
-db.once("open", () => {});
-db.on("error", (err) => console.log("Error " + err));
 
 const server = app.listen("8000", () => {
   console.log("Server is running on port: 8000");

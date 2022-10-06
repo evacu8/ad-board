@@ -25,8 +25,6 @@ const Register = () => {
       body: fd,
     };
 
-    console.log(fd);
-
     setStatus("isLoading");
     fetch(`${API_URL}auth/register`, options)
       .then((res) => {
@@ -56,34 +54,37 @@ const Register = () => {
       {status === "success" && (
         <Alert variant="success">
           <Alert.Heading>Success!</Alert.Heading>
-          <p> Your account has been created successfully. You can now login.</p>
+          <p>
+            {" "}
+            Your account has been created successfully. You can now log in.
+          </p>
         </Alert>
       )}
 
       {status === "serverError" && (
         <Alert variant="danger">
           <Alert.Heading>Something went wrong...</Alert.Heading>
-          <p> Unexpected error... Try again! </p>
+          <p> Unexpected error... Try again!</p>
         </Alert>
       )}
 
       {status === "clientError" && (
         <Alert variant="danger">
           <Alert.Heading>Not enough data</Alert.Heading>
-          <p> You have to fill all fields</p>
+          <p> You have to fill all fields!</p>
         </Alert>
       )}
 
       {status === "loginError" && (
         <Alert variant="warning">
           <Alert.Heading>Login already in use</Alert.Heading>
-          <p>You have to use other login </p>
+          <p>You have to use another login!</p>
         </Alert>
       )}
 
       {status === "isLoading" && (
         <Spinner variant="primary" animation="border" role="status">
-          <span className="sr-only">Loading...</span>
+          <span className="sr-only"></span>
         </Spinner>
       )}
 

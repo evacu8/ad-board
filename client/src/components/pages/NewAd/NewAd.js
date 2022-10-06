@@ -1,20 +1,43 @@
-import NewAdForm from "../../features/NewAdForm/NewAdForm";
-import { useDispatch } from "react-redux";
+import AdForm from "../../features/AdForm/AdForm";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { addAdData } from "../../../redux/adsRedux";
+import { API_URL } from "../../../config";
+import { useDispatch } from "react-redux";
+import { fetchAds } from "../../../redux/adsRedux";
 
 const NewAd = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [status, setStatus] = useState(null);
 
-  const handleSubmit = (payload) => {
-    dispatch(addAdData(payload));
-    navigate("/");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleSubmit = (fd) => {
+    const options = {
+      method: "POST",
+      credentials: "include",
+      body: fd,
+    };
+
+    fetch(`${API_URL}api/ads`, options)
+      .then((res) => {
+        if (res.status === 201) {
+          setStatus("success");
+          dispatch(fetchAds());
+          navigate("/");
+        } else if (res.status === 400) {
+          setStatus("clientError");
+        } else {
+          setStatus("serverError");
+        }
+      })
+      .catch((err) => {
+        setStatus("serverError");
+      });
   };
 
   return (
     <div>
-      <NewAdForm actionText="Create" action={handleSubmit} />
+      <AdForm actionText="Create" action={handleSubmit} />
     </div>
   );
 };

@@ -1,0 +1,10 @@
+@import '../../../styles/settings.scss';
+
+.card_wrapper {
+  border-style: none;
+}
+
+.image_container {
+  height: 30rem;
+  object-fit: cover;
+}

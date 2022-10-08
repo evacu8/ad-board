@@ -4,7 +4,7 @@ console.log("NODE_ENV:", process.env.NODE_ENV);
 
 //selectors
 export const getAllAds = ({ ads }) => ads;
-export const getAdById = ({ ads }, id) => ads.find((ad) => ad.id === id);
+export const getAdById = ({ ads }, id) => ads.find((ad) => ad._id === id);
 
 // actions
 const createActionName = (actionName) => `app/ads/${actionName}`;

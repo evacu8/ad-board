@@ -44,6 +44,7 @@ const AllAds = () => {
             id={ad._id}
             title={ad.title}
             location={ad.location}
+            photo={ad.photo}
           />
         ))}
       </ul>

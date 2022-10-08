@@ -1,10 +1,12 @@
-import { Card, Container } from "react-bootstrap";
+import styles from "./AdCard.module.scss";
+import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { removeAdData } from "../../../redux/adsRedux";
 import DeleteModal from "../../views/DeleteModal/DeleteModal";
+import { IMGS_URL } from "../../../config";
 
 const AdCard = (props) => {
   const dispatch = useDispatch();
@@ -20,29 +22,23 @@ const AdCard = (props) => {
   };
 
   return (
-    <Container className="col-lg-8 ">
-      <Card className="mt-1 rounded-0 border-0 border-bottom ">
-        <Card.Body className="d-flex justify-content-between">
-          <div className="d-flex align-items-center">
-            <Card.Title className="mb-0 me-3">{props.title}</Card.Title>
-            <Card.Text>
-              <>{props.location}</>
-            </Card.Text>
-          </div>
-          <div>
-            <Link to={`/ad/${props.id}`}>
-              <button type="button" className="btn btn-primary me-2">
-                Details
-              </button>
-            </Link>
-            <button
-              type="button"
-              className="btn btn-outline-danger"
-              onClick={handleShow}
-            >
-              Delete
+    <div className="d-flex col-sm mb-3">
+      <Card style={{ width: "18rem" }}>
+        <Card.Img
+          className={styles.card_image}
+          variant="top"
+          src={IMGS_URL + props.photo}
+        />
+        <Card.Body>
+          <Card.Title>{props.title}</Card.Title>
+          <Card.Text>
+            <>{props.location}</>
+          </Card.Text>
+          <Link to={`/ad/${props.id}`}>
+            <button type="button" className="btn btn-primary me-2">
+              Details
             </button>
-          </div>
+          </Link>
         </Card.Body>
       </Card>
       <DeleteModal
@@ -51,7 +47,7 @@ const AdCard = (props) => {
         handleClose={handleClose}
         handleRemove={handleRemove}
       />
-    </Container>
+    </div>
   );
 };
 

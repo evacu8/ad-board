@@ -12,12 +12,12 @@ const AdForm = ({ action, actionText, ...props }) => {
   const [price, setPrice] = useState(props.price || "");
   const [location, setLocation] = useState(props.location || "");
   const [photo, setPhoto] = useState(props.photo || "");
-  const [seller, setSeller] = useState(props.seller || "");
+  const [seller, setSeller] = useState("");
   const [status, setStatus] = useState(props.status || null);
 
   const user = useSelector(getUser);
   useEffect(() => {
-    setSeller(user.login);
+    setSeller(user);
   }, [user]);
 
   const handleSubmit = (e) => {
@@ -29,7 +29,6 @@ const AdForm = ({ action, actionText, ...props }) => {
     fd.append("price", price);
     fd.append("location", location);
     fd.append("seller", seller);
-    fd.append("published", Date.now());
 
     setStatus("isLoading");
     setTitle("");

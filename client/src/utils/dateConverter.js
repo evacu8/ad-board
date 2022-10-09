@@ -1,6 +1,5 @@
 export const dateConverter = (timestamp) => {
-  const a = new Date(Number(timestamp.slice(0, 10)));
-  console.log("a", a);
+  const a = new Date(Number(timestamp));
   const months = [
     "Jan",
     "Feb",
@@ -20,8 +19,6 @@ export const dateConverter = (timestamp) => {
   const date = a.getDate();
   const hour = a.getHours();
   const min = a.getMinutes();
-  const sec = a.getSeconds();
-  const time =
-    date + " " + month + " " + year + " " + hour + ":" + min + ":" + sec;
+  const time = date + " " + month + " " + year + " " + hour + ":" + min;
   return time;
 };

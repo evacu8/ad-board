@@ -29,16 +29,20 @@ const Login = () => {
     setStatus("loading");
     fetch(`${API_URL}auth/login`, options)
       .then((response) => {
-        if (response.status === 200) {
-          setStatus("success");
-          dispatch(logIn({ login }));
-          setTimeout(() => {
-            navigate("/");
-          }, 2000);
-        } else if (response.status === 400) {
+        if (response.status === 400) {
           setStatus("clientError");
-        } else {
+          return;
+        } else if (response.status === 500) {
           setStatus("serverError");
+          return;
+        } else if (response.status === 200) {
+          setStatus("success");
+          response.json().then((data) => {
+            dispatch(logIn(data.userId, data.userLogin));
+            setTimeout(() => {
+              navigate("/");
+            }, 1500);
+          });
         }
       })
       .catch((error) => {
@@ -70,27 +74,31 @@ const Login = () => {
           <p>Try again later</p>
         </Alert>
       )}
-
-      <Form.Group className="mb-3" controlId="formLogin">
-        <Form.Label>Login</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="Login"
-          onChange={(e) => setLogin(e.target.value)}
-        />
-      </Form.Group>
-
-      <Form.Group className="mb-3" controlId="formPassword">
-        <Form.Label>Password</Form.Label>
-        <Form.Control
-          type="password"
-          placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </Form.Group>
-      <Button variant="primary" type="submit">
-        Login
-      </Button>
+      {status !== "success" && (
+        <Form.Group className="mb-3" controlId="formLogin">
+          <Form.Label>Login</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Login"
+            onChange={(e) => setLogin(e.target.value)}
+          />
+        </Form.Group>
+      )}
+      {status !== "success" && (
+        <Form.Group className="mb-3" controlId="formPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </Form.Group>
+      )}
+      {status !== "success" && (
+        <Button variant="primary" type="submit">
+          Login
+        </Button>
+      )}
     </Form>
   );
 };

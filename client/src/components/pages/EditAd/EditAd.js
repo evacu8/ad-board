@@ -13,18 +13,17 @@ const EditAd = () => {
 
   const { id } = useParams();
   const adData = useSelector((state) => getAdById(state, id));
-  console.log("adData", adData);
 
   const handleSubmit = (fd) => {
     const options = {
-      method: "POST",
+      method: "PUT",
       credentials: "include",
       body: fd,
     };
 
-    fetch(`${API_URL}api/ads`, options)
+    fetch(`${API_URL}api/ads/${id}`, options)
       .then((res) => {
-        if (res.status === 201) {
+        if (res.status === 200) {
           setStatus("success");
           dispatch(fetchAds());
           navigate("/");
@@ -41,7 +40,16 @@ const EditAd = () => {
 
   return (
     <div>
-      <AdForm actionText="Edit" action={handleSubmit} />
+      <AdForm
+        actionText="Save changes"
+        action={handleSubmit}
+        title={adData.title}
+        text={adData.text}
+        price={adData.price}
+        location={adData.location}
+        photo={adData.photo}
+        status={status}
+      />
     </div>
   );
 };

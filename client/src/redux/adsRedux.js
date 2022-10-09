@@ -25,19 +25,6 @@ export const fetchAds = () => {
   };
 };
 
-export const updateAdData = (payload) => {
-  return (dispatch) => {
-    const options = {
-      method: "PUT",
-      headers: {},
-      body: payload,
-    };
-    fetch(`${API_URL}api/ads/${payload.id}`, options).then(
-      dispatch(editAd(payload))
-    );
-  };
-};
-
 export const removeAdData = (payload) => {
   return (dispatch) => {
     const options = {

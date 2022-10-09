@@ -24,7 +24,6 @@ const AdPage = () => {
   const handleShow = () => setShowModal(true);
 
   const publishedDate = dateConverter(adData.published);
-  console.log(publishedDate);
 
   const handleRemove = (e) => {
     e.preventDefault();
@@ -70,7 +69,7 @@ const AdPage = () => {
               <Card.Text>Seller: {adData.seller.login}</Card.Text>
               <Card.Text>Phone: {adData.seller.phone}</Card.Text>
             </Card.Body>
-            {user !== null && user.login === adData.seller.login && (
+            {user !== null && user === adData.seller._id && (
               <div className="d-flex flex-row flex-nowrap justify-content-between p-3">
                 <Link to={"/ad/edit/" + id}>
                   <Button variant="outline-info">Edit</Button>

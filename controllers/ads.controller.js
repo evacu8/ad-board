@@ -4,7 +4,7 @@ import { getImageFileType } from "../utils/getImageFileType.js";
 
 export const getAll = async (req, res) => {
   try {
-    const ads = await Ad.find().populate("seller");
+    const ads = await Ad.find().lean().populate("seller", "login phone");
     res.json(ads);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -13,7 +13,9 @@ export const getAll = async (req, res) => {
 
 export const getById = async (req, res) => {
   try {
-    const ad = await Ad.findById(req.params.id).populate("seller");
+    const ad = await Ad.findById(req.params.id)
+      .lean()
+      .populate("seller", "login phone");
     if (!ad) res.status(404).json({ message: "Not found" });
     else res.json(ad);
   } catch (err) {
@@ -34,7 +36,7 @@ export const getByPhrase = async (req, res) => {
 
 export const create = async (req, res) => {
   try {
-    const { title, text, price, location } = req.body;
+    const { title, text, price, location, seller } = req.body;
     const fileType = req.file ? await getImageFileType(req.file) : "unknown";
     if (
       title &&
@@ -48,14 +50,15 @@ export const create = async (req, res) => {
       req.file &&
       ["image/png", "image/jpeg", "image/gif"].includes(fileType)
     ) {
+      const dateNow = new Date();
       const ad = await Ad.create({
         title,
         text,
-        published: Date.now(),
+        published: dateNow.getTime(),
         photo: req.file.filename,
         price,
         location,
-        seller: req.session.user.id,
+        seller,
       });
       res.status(201).send({ message: `Ad created ${ad.title}` });
     } else {
@@ -75,17 +78,17 @@ export const update = async (req, res) => {
   try {
     const ad = await Ad.findById(req.params.id);
     if (!ad) return res.status(404).json({ message: "Ad not found" });
-    ad.title = title || ad.title;
-    ad.text = text || ad.text;
-    if (
-      (title && title !== ad.title) ||
-      (text && text !== ad.text) ||
-      (location && location !== ad.location) ||
-      (price && price !== ad.price) ||
-      (req.file && ["image/png", "image/jpeg", "image/gif"].includes(fileType))
-    ) {
-      ad.published = Date.now();
-    }
+    ad.title = title;
+    ad.text = text;
+    // if (
+    //   (title && title !== ad.title) ||
+    //   (text && text !== ad.text) ||
+    //   (location && location !== ad.location) ||
+    //   (price && price !== ad.price) ||
+    //   (req.file && ["image/png", "image/jpeg", "image/gif"].includes(fileType))
+    // ) {
+    //   ad.published = Date.now();
+    // }
     if (
       req.file &&
       ["image/png", "image/jpeg", "image/gif"].includes(fileType)
@@ -93,11 +96,10 @@ export const update = async (req, res) => {
       fs.unlinkSync(process.cwd() + "/public/uploads/" + ad.photo);
       ad.photo = req.file.filename;
     }
-    ad.price = price || ad.price;
-    ad.location = location || ad.location;
-    ad.seller = req.session.user.id;
-    await ad.save();
-    res.json({ message: "Ad updated " });
+    ad.price = price;
+    ad.location = location;
+    const updatedAd = await ad.save();
+    res.json({ message: "Ad updated ", updatedAd: updatedAd });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -105,7 +107,9 @@ export const update = async (req, res) => {
 
 export const remove = async (req, res) => {
   try {
-    const ad = await Ad.findById(req.params.id).populate("seller");
+    const ad = await Ad.findById(req.params.id)
+      .lean()
+      .populate("seller", "login");
     if (!ad) return res.status(404).json({ message: "Ad not found" });
     await ad.remove();
     fs.unlinkSync(process.cwd() + "/public/uploads/" + ad.photo);

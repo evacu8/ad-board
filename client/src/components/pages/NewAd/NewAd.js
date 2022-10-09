@@ -37,7 +37,7 @@ const NewAd = () => {
 
   return (
     <div>
-      <AdForm actionText="Create" action={handleSubmit} />
+      <AdForm actionText="Create" action={handleSubmit} status={status} />
     </div>
   );
 };

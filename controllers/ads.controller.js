@@ -107,9 +107,7 @@ export const update = async (req, res) => {
 
 export const remove = async (req, res) => {
   try {
-    const ad = await Ad.findById(req.params.id)
-      .lean()
-      .populate("seller", "login");
+    const ad = await Ad.findById(req.params.id);
     if (!ad) return res.status(404).json({ message: "Ad not found" });
     await ad.remove();
     fs.unlinkSync(process.cwd() + "/public/uploads/" + ad.photo);

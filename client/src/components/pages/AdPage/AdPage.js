@@ -2,19 +2,20 @@ import styles from "./AdPage.module.scss";
 import { getAdById } from "../../../redux/adsRedux";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import { useParams, Link, Navigate } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { IMGS_URL } from "../../../config";
 import { getUser } from "../../../redux/usersRedux";
-import { removeAd } from "../../../redux/adsRedux";
+import { removeAdData } from "../../../redux/adsRedux";
 import DeleteModal from "../../views/DeleteModal/DeleteModal";
 import { dateConverter } from "../../../utils/dateConverter";
 
 const AdPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { id } = useParams();
   const adData = useSelector((state) => getAdById(state, id));
   const user = useSelector((state) => getUser(state));
@@ -27,22 +28,22 @@ const AdPage = () => {
 
   const handleRemove = (e) => {
     e.preventDefault();
-    dispatch(removeAd(id));
+    dispatch(removeAdData(id));
     handleClose();
+    navigate("/");
   };
 
-  if (showModal)
-    return (
-      <DeleteModal
-        showModal={showModal}
-        handleClose={handleClose}
-        handleRemove={handleRemove}
-      />
-    );
-  if (!adData) return <Navigate to="/" />;
+  if (!adData) {
+    navigate("/");
+  }
 
   return (
     <div>
+      <DeleteModal
+        show={showModal}
+        handleClose={handleClose}
+        handleRemove={handleRemove}
+      />
       <Row className="d-flex justify-content-center mt-5">
         <Col xs="12" lg="5">
           <Card className={styles.card_wrapper}>
@@ -72,9 +73,15 @@ const AdPage = () => {
             {user !== null && user === adData.seller._id && (
               <div className="d-flex flex-row flex-nowrap justify-content-between p-3">
                 <Link to={"/ad/edit/" + id}>
-                  <Button variant="outline-info">Edit</Button>
+                  <Button variant="outline-info" style={{ width: "80px" }}>
+                    Edit
+                  </Button>
                 </Link>
-                <Button variant="outline-danger" onClick={handleShow}>
+                <Button
+                  variant="outline-danger"
+                  style={{ width: "80px" }}
+                  onClick={handleShow}
+                >
                   Delete
                 </Button>
               </div>

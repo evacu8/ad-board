@@ -10,6 +10,7 @@ import Footer from "./components/views/Footer/Footer";
 import Register from "./components/features/Register/Register";
 import Login from "./components/features/Login/Login";
 import Logout from "./components/features/Logout/Logout";
+import SearchResults from "./components/features/SearchResults/SearchResults";
 import { fetchAds } from "./redux/adsRedux";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
@@ -30,6 +31,7 @@ const App = () => {
         <Route path="/ad/new" element={<NewAd />} />
         <Route path="/ad/:id" element={<AdPage />} />
         <Route path="/ad/edit/:id" element={<EditAd />} />
+        <Route path="/ads/search/:searchPhrase" element={<SearchResults />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
       <Footer />

@@ -6,6 +6,7 @@ import { dirname } from "path";
 import mongoose from "mongoose";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import { DB_URI } from "./config.js";
 
 import adsRoutes from "./routes/ads.routes.js";
 import authRoutes from "./routes/auth.routes.js";
@@ -16,7 +17,6 @@ const __dirname = dirname(__filename);
 const app = express();
 
 const NODE_ENV = process.env.NODE_ENV;
-let dbUri = "";
 
 if (NODE_ENV !== "production") {
   app.use(
@@ -27,18 +27,14 @@ if (NODE_ENV !== "production") {
   );
 }
 
-if (NODE_ENV === "production") dbUri = "url to remote db";
-else if (NODE_ENV === "test") dbUri = "mongodb://localhost:27017/adBoardDBtest";
-else dbUri = "mongodb://localhost:27017/adBoardDB";
-
-mongoose.connect(dbUri, { useNewUrlParser: true });
+mongoose.connect(DB_URI, { useNewUrlParser: true });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   session({
     secret: process.env.SECRET,
-    store: MongoStore.create({ mongoUrl: dbUri }),
+    store: MongoStore.create({ mongoUrl: DB_URI }),
     resave: false,
     saveUninitialized: false,
     cookie: {

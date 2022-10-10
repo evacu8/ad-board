@@ -4,7 +4,7 @@ import { getImageFileType } from "../utils/getImageFileType.js";
 
 export const getAll = async (req, res) => {
   try {
-    const ads = await Ad.find().lean().populate("seller", "login phone");
+    const ads = await Ad.find().lean().populate("seller", "login phone avatar");
     res.json(ads);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -15,7 +15,7 @@ export const getById = async (req, res) => {
   try {
     const ad = await Ad.findById(req.params.id)
       .lean()
-      .populate("seller", "login phone");
+      .populate("seller", "login phone avatar");
     if (!ad) res.status(404).json({ message: "Not found" });
     else res.json(ad);
   } catch (err) {
@@ -27,7 +27,9 @@ export const getByPhrase = async (req, res) => {
   try {
     const ads = await Ad.find({
       $text: { $search: req.params.searchPhrase },
-    });
+    })
+      .lean()
+      .populate("seller", "login phone avatar");
     res.json(ads);
   } catch (err) {
     res.status(500).json({ message: err.message });

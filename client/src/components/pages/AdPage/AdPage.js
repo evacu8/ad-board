@@ -12,6 +12,7 @@ import { getUser } from "../../../redux/usersRedux";
 import { removeAdData } from "../../../redux/adsRedux";
 import DeleteModal from "../../views/DeleteModal/DeleteModal";
 import { dateConverter } from "../../../utils/dateConverter";
+import UserCard from "../../features/UserCard/UserCard";
 
 const AdPage = () => {
   const dispatch = useDispatch();
@@ -63,12 +64,19 @@ const AdPage = () => {
                 </Card.Title>
               </div>
               <Card.Text>{adData.text}</Card.Text>
-              <Card.Text className="mb-3">
+              <Card.Text className="mb-1 mt-4">
                 <b>Location:</b> {adData.location}
               </Card.Text>
-              <Card.Text>Published: {publishedDate}</Card.Text>
-              <Card.Text>Seller: {adData.seller.login}</Card.Text>
-              <Card.Text>Phone: {adData.seller.phone}</Card.Text>
+              <Card.Text>
+                <b>Published:</b> {publishedDate}
+              </Card.Text>
+              <div className="d-flex justify-content-center">
+                <UserCard
+                  name={adData.seller.login}
+                  phone={adData.seller.phone}
+                  avatar={adData.seller.avatar}
+                />
+              </div>
             </Card.Body>
             {user !== null && user === adData.seller._id && (
               <div className="d-flex flex-row flex-nowrap justify-content-between p-3">

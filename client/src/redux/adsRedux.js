@@ -1,6 +1,4 @@
 import { API_URL } from "../config";
-console.log("API_URL:", API_URL);
-console.log("NODE_ENV:", process.env.NODE_ENV);
 
 //selectors
 export const getAllAds = ({ ads }) => ads;

@@ -41,7 +41,7 @@ const AllAds = () => {
       <div className="justify-content-end">
         <SearchBar />
       </div>
-      <ul className="d-flex flex-wrap row">
+      <ul className="d-flex flex-wrap row p-0">
         {ads.map((ad) => (
           <AdCard
             key={ad._id}

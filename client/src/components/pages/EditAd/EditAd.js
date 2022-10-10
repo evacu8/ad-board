@@ -7,6 +7,7 @@ import { fetchAds, getAdById } from "../../../redux/adsRedux";
 
 const EditAd = () => {
   const [status, setStatus] = useState(null);
+  const header = "Edit ad";
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -41,6 +42,7 @@ const EditAd = () => {
   return (
     <div>
       <AdForm
+        header={header}
         actionText="Save changes"
         action={handleSubmit}
         title={adData.title}

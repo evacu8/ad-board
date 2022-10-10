@@ -6,7 +6,7 @@ import { IMGS_URL } from "../../../config";
 
 const AdCard = (props) => {
   return (
-    <div className="d-flex col col-sm-6 col-md-4 mb-3">
+    <div className="d-flex col col-sm-6 col-md-4 mb-3 justify-content-around">
       <Card style={{ width: "18rem" }}>
         <Card.Img
           className={styles.card_image}

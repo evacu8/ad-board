@@ -22,8 +22,6 @@ const SearchResults = () => {
     setLoaded(true);
   }, []);
 
-  console.log("ads", ads);
-
   return (
     <Container>
       <div className="d-flex justify-content-between mb-4">

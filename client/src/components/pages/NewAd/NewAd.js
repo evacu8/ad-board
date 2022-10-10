@@ -7,6 +7,7 @@ import { fetchAds } from "../../../redux/adsRedux";
 
 const NewAd = () => {
   const [status, setStatus] = useState(null);
+  const header = "Create new ad";
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -37,7 +38,12 @@ const NewAd = () => {
 
   return (
     <div>
-      <AdForm actionText="Create" action={handleSubmit} status={status} />
+      <AdForm
+        header={header}
+        actionText="Create"
+        action={handleSubmit}
+        status={status}
+      />
     </div>
   );
 };

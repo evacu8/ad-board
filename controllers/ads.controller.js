@@ -82,15 +82,6 @@ export const update = async (req, res) => {
     if (!ad) return res.status(404).json({ message: "Ad not found" });
     ad.title = title;
     ad.text = text;
-    // if (
-    //   (title && title !== ad.title) ||
-    //   (text && text !== ad.text) ||
-    //   (location && location !== ad.location) ||
-    //   (price && price !== ad.price) ||
-    //   (req.file && ["image/png", "image/jpeg", "image/gif"].includes(fileType))
-    // ) {
-    //   ad.published = Date.now();
-    // }
     if (
       req.file &&
       ["image/png", "image/jpeg", "image/gif"].includes(fileType)

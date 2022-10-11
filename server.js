@@ -12,9 +12,6 @@ import adsRoutes from "./routes/ads.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 
 const app = express();
-app.listen(process.env.PORT || 8000, () => {
-  console.log("Server is running...");
-});
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -46,17 +43,22 @@ app.use(
   })
 );
 
-app.use(express.static(path.join(__dirname, "/client/build")));
-app.use(express.static(path.join(__dirname, "/public")));
-app.use(express.static(path.join(__dirname, "/uploads/")));
-
 app.use("/api", adsRoutes);
 app.use("/auth", authRoutes);
+
+app.use(express.static(path.join(__dirname, "/client/build")));
+app.use(express.static(path.join(__dirname, "/public")));
+
+app.use((req, res) => {
+  res.status(404).send({ message: "Not found..." });
+});
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
 
-app.use((req, res) => {
-  res.status(404).send({ message: "Not found..." });
+app.listen(process.env.PORT || 8000, () => {
+  if (process.env.NODE_ENV === "development") {
+    console.log("Server is running...");
+  }
 });

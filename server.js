@@ -11,10 +11,13 @@ import { DB_URI } from "./config.js";
 import adsRoutes from "./routes/ads.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 
+const app = express();
+app.listen(process.env.PORT || 8000, () => {
+  console.log("Server is running...");
+});
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-const app = express();
 
 const NODE_ENV = process.env.NODE_ENV;
 
@@ -45,14 +48,15 @@ app.use(
 
 app.use(express.static(path.join(__dirname, "/client/build")));
 app.use(express.static(path.join(__dirname, "/public")));
+app.use(express.static(path.join(__dirname, "/uploads/")));
 
 app.use("/api", adsRoutes);
 app.use("/auth", authRoutes);
 
-app.use((req, res) => {
-  res.status(404).send({ message: "Not found..." });
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
 
-const server = app.listen(process.env.PORT || 8000, () => {
-  console.log("Server is running...");
+app.use((req, res) => {
+  res.status(404).send({ message: "Not found..." });
 });
